@@ -27,13 +27,36 @@ class board():
             print("|")
         print("-" * (self.col * 2))
 
-    #Places a token in a column
+    #Checking if Column is full
+    def columnFull(self, col):
+        #If the top cell is not empty, column is full
+        return self.board[0][col] != ' '
+
+    #Place token
     def addtoken(self, col, sym):
-        # Drops token into lowest available space
+        #Drops token into lowest available space
         for i in range(self.row - 1, -1, -1):
             if self.board[i][col] == ' ':
                 self.board[i][col] = str(sym)
                 break
+
+
+#input function for selecting columns
+def get_valid_column(player_name):
+    while True:
+        try:
+            #Get input and convert to index
+            col = int(input(f"{player_name}, choose column (1-7): ")) - 1
+
+            #Check number if in range
+            if col < 0 or col > 6:
+                print("Column out of range! Choose 1–7.")
+                continue
+
+            return col
+
+        except ValueError:
+            print("Invalid input! Enter a number between 1–7.")
 
 
 # ========= GAME SETUP ========== #
@@ -54,12 +77,24 @@ b.displayboard()
 # ========== MAIN GAME LOOP ========= #
 
 while True:
-    # Player 1 movves
-    col = int(input(f"{player1.name}, choose column (1-7): ")) - 1
+
+    #Player 1 turn
+    col = get_valid_column(player1.name)
+
+    #Check if full
+    while b.columnFull(col):
+        print("Column is full! Choose another one.")
+        col = get_valid_column(player1.name)
+
     b.addtoken(col, player1.num)
     b.displayboard()
 
-    # Player 2 moves
-    col = int(input(f"{player2.name}, choose column (1-7): ")) - 1
+    #Player 2 turn
+    col = get_valid_column(player2.name)
+
+    while b.columnFull(col):
+        print("Column is full! Choose another one.")
+        col = get_valid_column(player2.name)
+
     b.addtoken(col, player2.num)
     b.displayboard()
