@@ -1,3 +1,6 @@
+import csv
+from datetime import datetime
+
 class player():
     # holds players name and symbol 
     def __init__(self, name, number):
@@ -38,7 +41,7 @@ class board():
         for i in range(self.row - 1, -1, -1):
             if self.board[i][col] == ' ':
                 self.board[i][col] = str(sym)
-                break
+                return i  # return the row where token was placed
 
     # ========== CHECKING WIN CONDITIONS ========== #
 
@@ -84,7 +87,6 @@ class board():
         return False
 
 
-
 def get_valid_column(player_name):
     while True:
         try:
@@ -114,8 +116,10 @@ player2 = player(name2, num2)
 b = board()
 b.displayboard()
 
+# store moves
+moves = []
 
-# ========== MAIN GAME LOOP ========= #
+# ========= MAIN GAME LOOP ========= #
 
 while True:
 
@@ -126,12 +130,14 @@ while True:
         print("Column is full @ @ ")
         col = get_valid_column(player1.name)
 
-    b.addtoken(col, player1.num)
+    row = b.addtoken(col, player1.num)
     b.displayboard()
+    moves.append({'player': player1.name, 'symbol': player1.num, 'row': row, 'col': col})
 
     # WIN CHECK after every move
     if b.check_winner(player1.num):
         print(f"{player1.name} WINNNNNS;)")
+        winner = player1.name
         break
 
     # Player 2 moves
@@ -141,10 +147,24 @@ while True:
         print("Column is full @ @ ")
         col = get_valid_column(player2.name)
 
-    b.addtoken(col, player2.num)
+    row = b.addtoken(col, player2.num)
     b.displayboard()
+    moves.append({'player': player2.name, 'symbol': player2.num, 'row': row, 'col': col})
 
     # WIN CHECK after every moove 
     if b.check_winner(player2.num):
         print(f"{player2.name} WINNNNNS;)")
+        winner = player2.name
         break
+
+# export moves to csv
+timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+filename = f"tbconnect4_moves_{timestamp}.csv"
+
+with open(filename, 'w', newline='') as f:
+    writer = csv.DictWriter(f, fieldnames=['player', 'symbol', 'row', 'col'])
+    writer.writeheader()
+    for move in moves:
+        writer.writerow(move)
+
+print(f"Game moves saved to {filename}")
