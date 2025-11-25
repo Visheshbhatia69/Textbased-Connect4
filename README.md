@@ -1,51 +1,79 @@
 # Textbased-Connect4
-Text-based Connect 4 game built in Python(7X6 grid)
+A fully working text-based Connect 4 game built in Python (7×6 grid), supporting two players(human vs human as of now), win/tie detection, input validation, and automatic CSV export of all moves.
 
 # Description
-Connect Four is a two‑player strategy game played on a 7×6 grid. Players take turns dropping discs into columns, and the disc occupies the lowest available position. The objective is to connect four of your own pieces horizontally, vertically, or diagonally.
+Connect Four is a two-player strategy game played on a 7×6 grid. Players alternate turns dropping their chosen symbols into one of the seven columns. The piece falls to the lowest available position.
 
+A player wins by connecting four tokens:
 
+* Horizontally
+
+* Vertically
+
+* Diagonally (both directions)
+
+If the board fills with no winner, the game ends in a tie.
+
+This project implements the complete game in pure Python using classes for board state, players, move handling, input validation, and win detection.
+# Features implemented 
+
+* 7×6 game board
+* Clean board display
+* Player-defined symbols (single character)
+* Valid column checking
+* Full column detection
+* Automatic piece dropping to lowest position
+* Horizontal, vertical, and diagonal win detection
+* Tie detection when the board is full
+* Move-by-move history stored during the game
+* Automatic CSV export of all moves with timestamp
+* Fully interactive text-based interface
+* No external dependencies (uses only Python standard library)
 
 # Project Structure (as of LAST PUSH)
 
 ```
 connect4/
 ├── README.md
-└── tbconnect4.py   # no added as its empty as of now
+└── tbconnect4.py
 ```
 
 
-# How to Run (working on the steps)
+# How to Run 
 
-Once the game is implemented, it can be ran using:
+1. Make sure you have Python 3 installed
+
+2. Open a terminal inside the project folder
+
+3 .Run the game using:
 
 ```
 python tbconnect4.py
 ```
+You will be asked:
 
----
+* Player 1 name
 
-# Requirements (to be completed over coming days)
+* Player 1 symbol (1 character)
 
-This project will eventually include:
+* Player 2 name
 
-* A working text‑based Connect Four game with user input
-* Correctness checks (valid moves, win detection, error handling)
-* Ability to store and export game data
-* Code comments and documentation
-* Regular Git commits showing development progress
+* Player 2 symbol
 
-**Note:** Advanced features (AI agents, GUI, optimisation) are optional and may be added later if desired.
+* Columns to place tokens (1–7)
 
----
+Game Data Export
 
-## Next Steps (planned for upcoming days)
+After the game ends (win or tie), a CSV file is automatically generated:
+```
+tbconnect4_moves_YYYYMMDD_HHMMSS.csv
+```
+The file includes:
 
-* Implement board representation
-* Implement move validation and piece dropping
-* Implement win and tie detection
-* Add export functionality
-* Add tests and correctness assertions
+* player	
+* symbol	
+* row	
+* col
 
 typing...
 
