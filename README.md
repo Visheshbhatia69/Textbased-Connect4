@@ -1,5 +1,5 @@
-# Textbased-Connect4
-A fully working text-based Connect 4 game built in Python (7×6 grid), supporting two players(human vs human as of now), win/tie detection, input validation, and automatic CSV export of all moves.
+# Textbased and GUI -Connect4
+A fully working text-based Connect 4 game built in Python (7×6 grid), supporting two players(human vs human as of now)with text-based and GUI modes, win/tie detection, input validation, and automatic CSV export of all moves.
 
 # Description
 Connect Four is a two-player strategy game played on a 7×6 grid. Players alternate turns dropping their chosen symbols into one of the seven columns. The piece falls to the lowest available position.
@@ -27,7 +27,7 @@ This project implements the complete game in pure Python using classes for board
 * Tie detection when the board is full
 * Move-by-move history stored during the game
 * Automatic CSV export of all moves with timestamp
-* Fully interactive text-based interface
+* Fully interactive GUI interface using Tkinter
 * No external dependencies (uses only Python standard library)
 
 # Project Structure (as of LAST PUSH)
@@ -52,15 +52,9 @@ python tbconnect4.py
 ```
 You will be asked:
 
-* Player 1 name
+* text – play in terminal
 
-* Player 1 symbol (1 character)
-
-* Player 2 name
-
-* Player 2 symbol
-
-* Columns to place tokens (1–7)
+* gui – play using a Tkinter GUI window
 
 Game Data Export
 
