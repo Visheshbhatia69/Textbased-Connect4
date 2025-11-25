@@ -75,5 +75,28 @@ The file includes:
 * row	
 * col
 
+# Correctness Testing
+
+This implementation includes several layers of correctness checking to ensure the rules of Connect Four are followed properly:
+
+1. Input Validation
+* Ensures column numbers are between 1–7
+* Ensures symbols are exactly one character to avoid layout issues or movement
+* Re-prompts when invalid input is entered
+
+2. Move Validity Checks
+* Prevents placing tokens in a full column
+* Automatically places tokens in the lowest available row
+* Ensures board updates correctly after each move
+
+3. Rule Enforcement
+Includes complete win detection:
+* Horizontal wins  
+* Vertical wins  
+* Diagonal wins  
+* Tie detection triggers when the board is full with no winner
+
+These help ensure the main game mechanics behave as expected.
+
 typing...
 
