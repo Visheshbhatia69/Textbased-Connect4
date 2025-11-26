@@ -35,7 +35,7 @@ class board(): #Making fixed-size Connect 4 board
     def columnFull(self, col):
         return self.board[0][col] != ' '
 
-    #symbol
+    #Placing item/symbol
     def addtoken(self, col, sym):
         for i in range(self.row - 1, -1, -1):
             if self.board[i][col] == ' ':
@@ -101,11 +101,11 @@ class GUI:
         self.moves = []
         self.game_started = False
 
-        #Tkinter window
+        # Tkinter window
         self.root = tk.Tk()
         self.root.title("Connect 4 GUI Setup")
 
-        #setup frame
+        # Setup frame
         setup_frame = tk.Frame(self.root)
         setup_frame.pack(pady=20)
 
@@ -132,11 +132,11 @@ class GUI:
             messagebox.showerror("Error", "Player names must be different.")
             return
 
-        # Creates players with fixed symbols for GUI (R for red, Y for yellow)
+        # Create players with fixed symbols for GUI (R for red, Y for yellow)
         self.players = [player(p1_name, 'R'), player(p2_name, 'Y')]
         self.game_started = True
 
-        
+        # Clear setup and start game
         for widget in self.root.winfo_children():
             widget.destroy()
 
@@ -144,7 +144,7 @@ class GUI:
         self.buttons = []
         self.cells = []
 
-        # Frame for whole of GUI
+        # Frame for buttons
         btn_frame = tk.Frame(self.root)
         btn_frame.pack()
 
@@ -153,7 +153,7 @@ class GUI:
             btn.grid(row=0, column=c)
             self.buttons.append(btn)
 
-        
+        # Frame for board cells
         board_frame = tk.Frame(self.root)
         board_frame.pack()
 
@@ -194,7 +194,7 @@ class GUI:
         })
         self.Board()
 
-        # Checks for winner
+        # Check for winner
         if self.board.winner(self.players[self.current].num):
             self.status.config(text=f"{self.players[self.current].name} WINNNNNS ;) ")
             self.export_moves()
@@ -202,7 +202,7 @@ class GUI:
             messagebox.showinfo("Game Over", f"{self.players[self.current].name} WINNNNNS ;) ")
             return
 
-        # Checks for tie
+        # Check for tie
         if self.board.is_full():
             self.status.config(text="It's a TIE, focus and play bud :)")
             self.export_moves()
@@ -210,7 +210,7 @@ class GUI:
             messagebox.showinfo("Game Over", "It's a TIE, focus and play bud :)")
             return
 
-        # Switch players
+        # Switch player
         self.current = 1 - self.current
         color = "Red" if self.current == 0 else "Yellow"
         self.status.config(text=f"{self.players[self.current].name} ({color})'s turn")
