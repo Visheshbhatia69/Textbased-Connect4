@@ -35,7 +35,7 @@ class board(): #Making fixed-size Connect 4 board
     def columnFull(self, col):
         return self.board[0][col] != ' '
 
-    #Placing item/symbol
+    #symbol
     def addtoken(self, col, sym):
         for i in range(self.row - 1, -1, -1):
             if self.board[i][col] == ' ':
@@ -94,19 +94,57 @@ def get_valid_symbol(player_name):
 # ================== GUI CLASS (Tkinter) ==================== #
 
 class GUI:
-    def __init__(self, board, player1, player2):
-        self.board = board
-        self.players = [player1, player2]
+    def __init__(self):
+        self.board = board()
+        self.players = []
         self.current = 0
         self.moves = []
+        self.game_started = False
 
-        # Tkinter window
+        #Tkinter window
         self.root = tk.Tk()
+        self.root.title("Connect 4 GUI Setup")
+
+        #setup frame
+        setup_frame = tk.Frame(self.root)
+        setup_frame.pack(pady=20)
+
+        tk.Label(setup_frame, text="Player 1 Name:").grid(row=0, column=0)
+        self.p1_entry = tk.Entry(setup_frame)
+        self.p1_entry.grid(row=0, column=1)
+
+        tk.Label(setup_frame, text="Player 2 Name:").grid(row=1, column=0)
+        self.p2_entry = tk.Entry(setup_frame)
+        self.p2_entry.grid(row=1, column=1)
+
+        start_btn = tk.Button(setup_frame, text="Start Game", command=self.start_game)
+        start_btn.grid(row=2, columnspan=2, pady=10)
+
+        self.root.mainloop()
+
+    def start_game(self):
+        p1_name = self.p1_entry.get().strip()
+        p2_name = self.p2_entry.get().strip()
+        if not p1_name or not p2_name:
+            messagebox.showerror("Error", "Please enter names for both players.")
+            return
+        if p1_name == p2_name:
+            messagebox.showerror("Error", "Player names must be different.")
+            return
+
+        # Creates players with fixed symbols for GUI (R for red, Y for yellow)
+        self.players = [player(p1_name, 'R'), player(p2_name, 'Y')]
+        self.game_started = True
+
+        
+        for widget in self.root.winfo_children():
+            widget.destroy()
+
         self.root.title("Connect 4 GUI")
         self.buttons = []
         self.cells = []
 
-        # Frame for buttons
+        # Frame for whole of GUI
         btn_frame = tk.Frame(self.root)
         btn_frame.pack()
 
@@ -115,7 +153,7 @@ class GUI:
             btn.grid(row=0, column=c)
             self.buttons.append(btn)
 
-        # Frame for board cells
+        
         board_frame = tk.Frame(self.root)
         board_frame.pack()
 
@@ -127,23 +165,23 @@ class GUI:
                 row_cells.append(lbl)
             self.cells.append(row_cells)
 
-        self.status = tk.Label(self.root, text=f"{self.players[self.current].name} ({self.players[self.current].num}) starts!", font=('Arial',12))
+        self.status = tk.Label(self.root, text=f"{self.players[self.current].name} (Red) starts!", font=('Arial',12))
         self.status.pack()
-
-        self.root.mainloop()
 
     def Board(self):
         for r in range(self.board.row):
             for c in range(self.board.col):
                 cell = self.board.board[r][c]
                 color = 'white'
-                if cell == self.players[0].num:
+                if cell == 'R':
                     color = 'red'
-                elif cell == self.players[1].num:
+                elif cell == 'Y':
                     color = 'yellow'
                 self.cells[r][c].config(bg=color)
 
     def play(self, col):
+        if not self.game_started:
+            return
         if self.board.columnFull(col):
             self.status.config(text=f"Column {col+1} is full {self.players[self.current].name}, choose another column.")
             return
@@ -156,7 +194,7 @@ class GUI:
         })
         self.Board()
 
-        # Check for winner
+        # Checks for winner
         if self.board.winner(self.players[self.current].num):
             self.status.config(text=f"{self.players[self.current].name} WINNNNNS ;) ")
             self.export_moves()
@@ -164,7 +202,7 @@ class GUI:
             messagebox.showinfo("Game Over", f"{self.players[self.current].name} WINNNNNS ;) ")
             return
 
-        # Check for tie
+        # Checks for tie
         if self.board.is_full():
             self.status.config(text="It's a TIE, focus and play bud :)")
             self.export_moves()
@@ -172,9 +210,10 @@ class GUI:
             messagebox.showinfo("Game Over", "It's a TIE, focus and play bud :)")
             return
 
-        # Switch player
+        # Switch players
         self.current = 1 - self.current
-        self.status.config(text=f"{self.players[self.current].name} ({self.players[self.current].num})'s turn")
+        color = "Red" if self.current == 0 else "Yellow"
+        self.status.config(text=f"{self.players[self.current].name} ({color})'s turn")
 
     def disable_buttons(self):
         for btn in self.buttons:
@@ -190,18 +229,6 @@ class GUI:
                 writer.writerow(move)
         print(f"Moves saved to {filename}")
 
-# ===================== GAME SETUP =====================
-
-name = input("Player 1's Name: ")
-num = get_valid_symbol(name)
-name2 = input("Player 2's Name: ")
-num2 = get_valid_symbol(name2)
-
-player1 = player(name, num)
-player2 = player(name2, num2)
-b = board()
-moves = []
-
 # ===================== CHOOSE MODE =====================
 
 while True:
@@ -211,53 +238,65 @@ while True:
     print("Invalid choice... Please type exactly 'text' or 'gui'.")
 
 if mode == 'gui':
-    gui = GUI(b, player1, player2)
+    gui = GUI()
 else:
+    # ===================== GAME SETUP =====================
+
+    name = input("Player 1's Name: ")
+    num = get_valid_symbol(name)
+    name2 = input("Player 2's Name: ")
+    num2 = get_valid_symbol(name2)
+
+    player1 = player(name, num)
+    player2 = player(name2, num2)
+    b = board()
+    moves = []
+
     b.displayboard() # display initial board for text mode
 
-# ========= MAIN GAME LOOP (TEXT MODE) =========
+    # ========= MAIN GAME LOOP (TEXT MODE) =========
 
-while True:
-    # Player 1 moves
-    col = get_valid_column(player1.name)
-    while b.columnFull(col):
-        print("Column is full @ @")
+    while True:
+        # Player 1 moves
         col = get_valid_column(player1.name)
-    row = b.addtoken(col, player1.num)
-    b.displayboard()
-    moves.append({'player': player1.name, 'symbol': player1.num, 'row': row, 'col': col})
-    if b.winner(player1.num):
-        print(f"{player1.name} WINNNNNS ;) ")
-        winner = player1.name
-        break
-    if b.is_full():
-        print("It's a TIE, focus and play bud :)")
-        winner = "Tie"
-        break
+        while b.columnFull(col):
+            print("Column is full @ @")
+            col = get_valid_column(player1.name)
+        row = b.addtoken(col, player1.num)
+        b.displayboard()
+        moves.append({'player': player1.name, 'symbol': player1.num, 'row': row, 'col': col})
+        if b.winner(player1.num):
+            print(f"{player1.name} WINNNNNS ;) ")
+            winner = player1.name
+            break
+        if b.is_full():
+            print("It's a TIE, focus and play bud :)")
+            winner = "Tie"
+            break
 
-    # Player 2 moves
-    col = get_valid_column(player2.name)
-    while b.columnFull(col):
-        print("Column is full @ @")
+        # Player 2 moves
         col = get_valid_column(player2.name)
-    row = b.addtoken(col, player2.num)
-    b.displayboard()
-    moves.append({'player': player2.name, 'symbol': player2.num, 'row': row, 'col': col})
-    if b.winner(player2.num):
-        print(f"{player2.name} WINNNNNS :) ")
-        winner = player2.name
-        break
-    if b.is_full():
-        print("It's a TIE, focus and play bud :)")
-        winner = "Tie"
-        break
+        while b.columnFull(col):
+            print("Column is full @ @")
+            col = get_valid_column(player2.name)
+        row = b.addtoken(col, player2.num)
+        b.displayboard()
+        moves.append({'player': player2.name, 'symbol': player2.num, 'row': row, 'col': col})
+        if b.winner(player2.num):
+            print(f"{player2.name} WINNNNNS :) ")
+            winner = player2.name
+            break
+        if b.is_full():
+            print("It's a TIE, focus and play bud :)")
+            winner = "Tie"
+            break
 
-# export moves to csv
-timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-filename = f"tbconnect4_moves_{timestamp}.csv"
-with open(filename, 'w', newline='') as f:
-    writer = csv.DictWriter(f, fieldnames=['player', 'symbol', 'row', 'col'])
-    writer.writeheader()
-    for move in moves:
-        writer.writerow(move)
-print(f"Game moves saved to {filename}")
+    # export moves to csv
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = f"tbconnect4_moves_{timestamp}.csv"
+    with open(filename, 'w', newline='') as f:
+        writer = csv.DictWriter(f, fieldnames=['player', 'symbol', 'row', 'col'])
+        writer.writeheader()
+        for move in moves:
+            writer.writerow(move)
+    print(f"Game moves saved to {filename}")
