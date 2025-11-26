@@ -18,6 +18,7 @@ This project implements the complete game in pure Python using classes for board
 # Features implemented 
 
 * 7×6 game board
+* Fully interactive GUI interface using Tkinter
 * Clean board display
 * Player-defined symbols (single character)
 * Valid column checking
@@ -26,8 +27,8 @@ This project implements the complete game in pure Python using classes for board
 * Horizontal, vertical, and diagonal win detection
 * Tie detection when the board is full
 * Move-by-move history stored during the game
-* Automatic CSV export of all moves with timestamp
-* Fully interactive GUI interface using Tkinter
+* Automatic CSV logging in both modes
+* Player name validation in GUI
 * No external dependencies (uses only Python standard library)
 
 # Project Structure (as of LAST PUSH)
@@ -69,6 +70,15 @@ The file includes:
 * row	
 * col
 
+# Mode Selection
+
+When running the script, you are prompted to choose a mode:
+
+* text – play in terminal
+* gui – play using a Tkinter GUI window
+
+The script handles both modes seamlessly, sharing the same core logic for win/tie detection and move recording.  
+
 # Correctness Testing
 
 This implementation includes several layers of correctness checking to ensure the rules of Connect Four are followed properly:
@@ -92,5 +102,7 @@ Includes complete win detection:
 
 These help ensure the main game mechanics behave as expected.
 
-typing...
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+was typing...
 
