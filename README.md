@@ -102,7 +102,6 @@ Includes complete win detection:
 
 These help ensure the main game mechanics behave as expected.
 
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 was typing...
 
